@@ -20,14 +20,14 @@ const initDiscordStrategy = () => {
         return done(null, false);
       }
 
-      const riotName = members[profile.id] ?? null;
+      const riotId = members[profile.id] ?? null;
 
       return done(null, {
-        discord_id: profile.id,
-        username: profile.username,
-        avatar: profile.avatar ?? null,
-        riot_summoner_name: riotName,
-      });
+  discord_id: profile.id,
+  username: profile.username,
+  avatar: profile.avatar ?? null,
+  riot_summoner_name: members[profile.id] ?? null,
+});
     } catch (err) {
       return done(err);
     }
