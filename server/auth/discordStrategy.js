@@ -1,5 +1,6 @@
 const passport = require('passport');
 const DiscordStrategy = require('passport-discord');
+const members = require('../config/members');
 
 const initDiscordStrategy = () => {
   passport.use('discord', new DiscordStrategy.Strategy({
@@ -19,10 +20,13 @@ const initDiscordStrategy = () => {
         return done(null, false);
       }
 
+      const riotName = members[profile.id] ?? null;
+
       return done(null, {
         discord_id: profile.id,
         username: profile.username,
         avatar: profile.avatar ?? null,
+        riot_summoner_name: riotName,
       });
     } catch (err) {
       return done(err);

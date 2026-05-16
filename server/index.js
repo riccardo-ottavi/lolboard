@@ -22,10 +22,15 @@ app.use(passport.session());
 initDiscordStrategy();
 
 app.use('/auth', authRouter);
-app.use('/summoners', summonerRouter)
+app.use('/summoners',requireAuth, summonerRouter)
 
-app.get('/dashboard', requireAuth, (req, res) => {
-  res.json({ user: req.user });
+app.get("/", (req, res) => {
+  res.send("<h1>Lolboard Homepage</h1>");
+});
+
+//test
+app.get('/me', requireAuth, (req, res) => {
+  res.json(req.user);
 });
 
 app.listen(3000, () => console.log('Server running on port 3000'));
