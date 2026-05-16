@@ -1,5 +1,6 @@
 require('dotenv').config();
 const express = require('express');
+const cors = require("cors");
 const session = require('express-session');
 const summonerRouter = require('./routers/summonerRouter');
 const passport = require('passport');
@@ -9,11 +10,19 @@ const { requireAuth } = require('./middlewares/requireAuth');
 
 const app = express();
 
+app.use(cors({
+  origin: "http://localhost:5173", 
+  credentials: true
+}));
+
 app.use(session({
   secret: process.env.SESSION_SECRET,
   resave: false,
   saveUninitialized: false,
-  cookie: { secure: false },
+  cookie: {
+    secure: false,
+    sameSite: "lax"  
+  },
 }));
 
 app.use(passport.initialize());
