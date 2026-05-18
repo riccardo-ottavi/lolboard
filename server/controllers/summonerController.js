@@ -50,23 +50,28 @@ const getRecentMatches = async (puuid, count = 10) => {
 
 const index = async (req, res) => {
   try {
-    const results = await Promise.all(
-      Object.entries(members).map(async ([discordId, user]) => {
-        const account = await getAccount(user);
+    const results = [];
 
+    for (const [discordId, user] of Object.entries(members)) {
+      try {
+        console.log(`🔍 Processing: ${user.gameName}#${user.tagLine}`);
+
+        const account = await getAccount(user);
         const summoner = await getSummoner(account.puuid);
         const rank = await getRank(account.puuid);
-        //const matches = await getRecentMatches(account.puuid);
 
-        return {
+        results.push({
           discordId,
           account,
           summoner,
           rank: rank ?? { tier: "UNRANKED" },
-          //matches,
-        };
-      })
-    );
+        });
+
+      } catch (err) {
+        console.error(`❌ FALLITO: ${user.gameName}#${user.tagLine}`);
+        console.error(err.message);
+      }
+    }
 
     res.json(results);
   } catch (err) {

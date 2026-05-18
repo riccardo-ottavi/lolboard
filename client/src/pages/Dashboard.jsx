@@ -1,35 +1,92 @@
-import { useState, useEffect } from "react";
+import { useEffect, useState } from "react";
 
 export default function Dashboard() {
-    const [data, setData] = useState(null);
+    const [data, setData] = useState([]);
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState(null);
 
     useEffect(() => {
         fetch("http://localhost:3000/summoners", {
             credentials: "include",
         })
-            .then((res) => res.json())
-            .then(setData);
+            .then(async (res) => {
+                const json = await res.json();
+
+                if (!res.ok) {
+                    throw new Error(json?.message || "Errore server");
+                }
+
+                return json;
+            })
+            .then((json) => {
+                // 🔥 protezione totale: solo array valido
+                if (!Array.isArray(json)) {
+                    throw new Error("Risposta non valida dal server");
+                }
+
+                setData(json.filter(Boolean)); // elimina null/undefined
+            })
+            .catch((err) => {
+                console.error(err);
+                setError(err.message);
+            })
+            .finally(() => {
+                setLoading(false);
+            });
     }, []);
 
-    if (!data) return <h2>Caricamento...</h2>;
+    // 🟡 loading state
+    if (loading) {
+        return <h2 style={{ padding: 20 }}>Caricamento...</h2>;
+    }
 
-    return (
-    <div style={{ padding: "20px" }}>
-        {data.map((player) => (
-            <div key={player.discordId}>
-                <h1>
-                    {player.account.gameName}#{player.account.tagLine}
-                </h1>
-
-                <h2>Rank</h2>
-                <p>{player.rank?.tier || "UNRANKED"}</p>
-
-                <h2>Level</h2>
-                <p>{player.summoner.summonerLevel}</p>
-
-                <hr />
+    // 🔴 error state
+    if (error) {
+        return (
+            <div style={{ padding: 20, color: "red" }}>
+                <h2>Errore</h2>
+                <p>{error}</p>
             </div>
-        ))}
-    </div>
-);
+        );
+    }
+
+    // 🟢 empty state
+    if (data.length === 0) {
+        return <h2 style={{ padding: 20 }}>Nessun giocatore trovato</h2>;
+    }
+
+    // 🟢 render sicuro
+    return (
+        <div style={{ padding: 20 }}>
+            <h1>Dashboard Summoners</h1>
+
+            {data.map((player) => (
+                <div
+                    key={player.discordId}
+                    style={{
+                        border: "1px solid #ddd",
+                        margin: "10px 0",
+                        padding: "10px",
+                        borderRadius: "8px",
+                    }}
+                >
+                    <h2>
+                        {player.account?.gameName ?? "Unknown"}#
+                        {player.account?.tagLine ?? ""}
+                    </h2>
+
+                    <p>
+                        <b>Level:</b>{" "}
+                        {player.summoner?.summonerLevel ?? "?"}
+                    </p>
+
+                    <p>
+                        <b>Rank:</b>{" "}
+                        {player.rank?.tier ?? "UNRANKED"}
+                        {player.rank?.rank ? ` ${player.rank.rank}` : ""}
+                    </p>
+                </div>
+            ))}
+        </div>
+    );
 }
