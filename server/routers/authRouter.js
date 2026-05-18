@@ -10,7 +10,7 @@ router.get('/discord/callback',
     failureRedirect: '/auth/denied',
   }),
   (req, res) => {
-    res.redirect('/summoners');
+    res.redirect(`${process.env.CLIENT_URL}/dashboard`);
   }
 );
 
