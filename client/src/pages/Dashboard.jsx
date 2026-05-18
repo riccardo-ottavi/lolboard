@@ -19,12 +19,11 @@ export default function Dashboard() {
                 return json;
             })
             .then((json) => {
-                // 🔥 protezione totale: solo array valido
                 if (!Array.isArray(json)) {
                     throw new Error("Risposta non valida dal server");
                 }
 
-                setData(json.filter(Boolean)); // elimina null/undefined
+                setData(json.filter(Boolean));
             })
             .catch((err) => {
                 console.error(err);
@@ -35,12 +34,10 @@ export default function Dashboard() {
             });
     }, []);
 
-    // 🟡 loading state
     if (loading) {
         return <h2 style={{ padding: 20 }}>Caricamento...</h2>;
     }
 
-    // 🔴 error state
     if (error) {
         return (
             <div style={{ padding: 20, color: "red" }}>
@@ -50,14 +47,19 @@ export default function Dashboard() {
         );
     }
 
-    // 🟢 empty state
     if (data.length === 0) {
         return <h2 style={{ padding: 20 }}>Nessun giocatore trovato</h2>;
     }
 
-    // 🟢 render sicuro
     return (
         <div style={{ padding: 20 }}>
+
+            <a href="/profile">
+                <button style={{ marginBottom: 20 }}>
+                    Vai al profilo
+                </button>
+            </a>
+
             <h1>Dashboard Summoners</h1>
 
             {data.map((player) => (

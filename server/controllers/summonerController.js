@@ -54,7 +54,7 @@ const index = async (req, res) => {
 
     for (const [discordId, user] of Object.entries(members)) {
       try {
-        console.log(`🔍 Processing: ${user.gameName}#${user.tagLine}`);
+        console.log(`Processing: ${user.gameName}#${user.tagLine}`);
 
         const account = await getAccount(user);
         const summoner = await getSummoner(account.puuid);
@@ -80,4 +80,33 @@ const index = async (req, res) => {
   }
 };
 
-module.exports = { index };
+const show = async (req, res) => {
+  try {
+    const { discordId } = req.params;
+
+    const user = members[discordId];
+
+    if (!user) {
+      return res.status(404).json({ message: "User non trovato" });
+    }
+
+    const account = await getAccount(user);
+    const summoner = await getSummoner(account.puuid);
+    const rank = await getRank(account.puuid);
+    const matches = await getRecentMatches(account.puuid, 5);
+
+    return res.json({
+      discordId,
+      account,
+      summoner,
+      rank: rank ?? { tier: "UNRANKED" },
+      matches,
+    });
+
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ message: err.message });
+  }
+};
+
+module.exports = { index, show };
