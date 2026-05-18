@@ -1,38 +1,35 @@
-import { useEffect, useState } from "react";
+import { useState, useEffect } from "react";
 
 export default function Dashboard() {
-  const [data, setData] = useState(null);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
+    const [data, setData] = useState(null);
 
-  useEffect(() => {
-    fetch("http://localhost:3000/summoners", {
-      credentials: "include",
-    })
-      .then(async (res) => {
-        if (!res.ok) {
-          throw new Error("Errore nel fetch");
-        }
-        return res.json();
-      })
-      .then((data) => {
-        setData(data);
-        setLoading(false);
-      })
-      .catch((err) => {
-        setError(err.message);
-        setLoading(false);
-      });
-  }, []);
+    useEffect(() => {
+        fetch("http://localhost:3000/summoners", {
+            credentials: "include",
+        })
+            .then((res) => res.json())
+            .then(setData);
+    }, []);
 
-  if (loading) return <h2>Caricamento...</h2>;
-  if (error) return <h2>Errore: {error}</h2>;
+    if (!data) return <h2>Caricamento...</h2>;
 
-  return (
+    return (
     <div style={{ padding: "20px" }}>
-      <h1>Dashboard Summoners</h1>
+        {data.map((player) => (
+            <div key={player.discordId}>
+                <h1>
+                    {player.account.gameName}#{player.account.tagLine}
+                </h1>
 
-      <pre>{JSON.stringify(data, null, 2)}</pre>
+                <h2>Rank</h2>
+                <p>{player.rank?.tier || "UNRANKED"}</p>
+
+                <h2>Level</h2>
+                <p>{player.summoner.summonerLevel}</p>
+
+                <hr />
+            </div>
+        ))}
     </div>
-  );
+);
 }

@@ -1,7 +1,14 @@
 const members = {
   "1162708065389379674": { gameName: "MaryahCarry", tagLine: "EUW" },
-  "905209322894655589": { gameName: "DarkBull97", tagLine: "EUW" },
-  "252690405605376000": { gameName: "Lippocalippo", tagLine: "LIPPO" }
+  "905209322894655589": { gameName: "Dark97Bull", tagLine: "EUW" },
+  "252690405605376000": { gameName: "Lippocalippo", tagLine: "EUW" },
+  "142995727000272896": { gameName: "MarioVitola", tagLine: "Feet" },
+  "337343788072566787": { gameName: "Bietola Oscura", tagLine: "EUW" },
+  "925857261438513252": { gameName: "JLuke17", tagLine: "EUW" },
+  "317373585771724811": { gameName: "HainekoX", tagLine: "EUW" },
+  "275332669531881473": { gameName: "Dante", tagLine: "LIPPO" },
+  "358539469898383362": { gameName: "CarlitoBan", tagLine: "5442" },
+  "165099509762883584": { gameName: "FOL", tagLine: "00000" },
 };
 
 module.exports = members;

@@ -1,3 +1,5 @@
+const members = require('../config/members');
+
 const getAccount = async ({ gameName, tagLine }) => {
   const res = await fetch(
     `https://europe.api.riotgames.com/riot/account/v1/accounts/by-riot-id/${encodeURIComponent(gameName)}/${encodeURIComponent(tagLine)}`,
@@ -48,17 +50,25 @@ const getRecentMatches = async (puuid, count = 10) => {
 
 const index = async (req, res) => {
   try {
-    const riotId = req.user.riot_summoner_name;
-    if (!riotId) return res.status(400).json({ message: 'Nessun account Riot collegato.' });
+    const results = await Promise.all(
+      Object.entries(members).map(async ([discordId, user]) => {
+        const account = await getAccount(user);
 
-    const account = await getAccount(riotId);
-    const summoner = await getSummoner(account.puuid);
-    console.log('summoner:', summoner); 
-    console.log('summonerId:', summoner.id); 
-    const rank = await getRank(account.puuid);
-    const matches = await getRecentMatches(account.puuid);
+        const summoner = await getSummoner(account.puuid);
+        const rank = await getRank(account.puuid);
+        //const matches = await getRecentMatches(account.puuid);
 
-    res.json({ account, summoner, rank: rank ?? { tier: 'UNRANKED' }, matches });
+        return {
+          discordId,
+          account,
+          summoner,
+          rank: rank ?? { tier: "UNRANKED" },
+          //matches,
+        };
+      })
+    );
+
+    res.json(results);
   } catch (err) {
     console.error(err);
     res.status(500).json({ message: err.message });
