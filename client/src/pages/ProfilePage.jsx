@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 export default function Profile() {
     const [user, setUser] = useState(null);
     const [profile, setProfile] = useState(null);
+    const [matches, setMatches] = useState([]);
 
     useEffect(() => {
         fetch("http://localhost:3000/me", {
@@ -21,6 +22,19 @@ export default function Profile() {
             .then((res) => res.json())
             .then(setProfile);
     }, [user]);
+
+    // 🔥 NUOVO: fetch match dopo profile
+    useEffect(() => {
+        if (!profile?.matchIds) return;
+
+        Promise.all(
+            profile.matchIds.map((id) =>
+                fetch(`http://localhost:3000/matches/${id}`, {
+                    credentials: "include",
+                }).then((r) => r.json())
+            )
+        ).then(setMatches);
+    }, [profile]);
 
     if (!user) return <h2>Caricamento...</h2>;
 
@@ -64,17 +78,18 @@ export default function Profile() {
 
             <h2 style={{ marginTop: 30 }}>Ultime partite</h2>
 
-            {!profile?.matches && <p>Caricamento partite...</p>}
+            {matches.length === 0 && <p>Caricamento partite...</p>}
 
-            {profile?.matches?.map((match) => {
-                const info = match.info;
+            {matches.map((match) => {
+                const info = match.participants ? match : match.info;
+
                 const me = info.participants.find(
                     (p) => p.puuid === profile.account.puuid
                 );
 
                 return (
                     <div
-                        key={info.gameId}
+                        key={match.matchId}
                         style={{
                             border: "1px solid #ddd",
                             margin: "10px 0",
@@ -83,12 +98,15 @@ export default function Profile() {
                             background: me?.win ? "#e6ffe6" : "#ffe6e6",
                         }}
                     >
-                        <b>{me?.championName}</b>
+                        <b>{me?.champion}</b>
                         <p>{me?.win ? "VICTORIA" : "SCONFITTA"}</p>
                         <p>
                             KDA: {me?.kills}/{me?.deaths}/{me?.assists}
                         </p>
-                        <p>Durata: {Math.floor(info.gameDuration / 60)} min</p>
+                        <p>
+                            Durata:{" "}
+                            {Math.floor(match.gameDuration / 60)} min
+                        </p>
                     </div>
                 );
             })}

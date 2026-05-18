@@ -93,14 +93,17 @@ const show = async (req, res) => {
     const account = await getAccount(user);
     const summoner = await getSummoner(account.puuid);
     const rank = await getRank(account.puuid);
-    const matches = await getRecentMatches(account.puuid, 5);
+    const matchIds = await fetch(
+      `https://europe.api.riotgames.com/lol/match/v5/matches/by-puuid/${account.puuid}/ids?count=5`,
+      { headers: { 'X-Riot-Token': process.env.RIOT_API_KEY } }
+    ).then(r => r.json());
 
     return res.json({
       discordId,
       account,
       summoner,
       rank: rank ?? { tier: "UNRANKED" },
-      matches,
+      matchIds
     });
 
   } catch (err) {

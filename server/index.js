@@ -3,6 +3,7 @@ const express = require('express');
 const cors = require("cors");
 const session = require('express-session');
 const summonerRouter = require('./routers/summonerRouter');
+const matchesRouter = require("./routers/matchesRouter");
 const passport = require('passport');
 const authRouter = require('./routers/authRouter');
 const { initDiscordStrategy } = require('./auth/discordStrategy');
@@ -31,7 +32,8 @@ app.use(passport.session());
 initDiscordStrategy();
 
 app.use('/auth', authRouter);
-app.use('/summoners',requireAuth, summonerRouter)
+app.use('/summoners',requireAuth, summonerRouter);
+app.use("/matches", requireAuth, matchesRouter);
 
 app.get("/", (req, res) => {
   res.send("<h1>Lolboard Homepage</h1>");
