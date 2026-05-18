@@ -1,6 +1,8 @@
 import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 export default function Profile() {
+    const navigate = useNavigate();
     const [user, setUser] = useState(null);
     const [profile, setProfile] = useState(null);
     const [matches, setMatches] = useState([]);
@@ -23,13 +25,12 @@ export default function Profile() {
             .then(setProfile);
     }, [user]);
 
-    // 🔥 NUOVO: fetch match dopo profile
     useEffect(() => {
         if (!profile?.matchIds) return;
 
         Promise.all(
             profile.matchIds.map((id) =>
-                fetch(`http://localhost:3000/matches/${id}`, {
+                fetch(`http://localhost:3000/matches/match/${id}`, {
                     credentials: "include",
                 }).then((r) => r.json())
             )
@@ -96,7 +97,9 @@ export default function Profile() {
                             padding: "10px",
                             borderRadius: "8px",
                             background: me?.win ? "#e6ffe6" : "#ffe6e6",
+                            cursor: "pointer"
                         }}
+                        onClick={() => navigate(`/match/${match.matchId}`)}
                     >
                         <b>{me?.champion}</b>
                         <p>{me?.win ? "VICTORIA" : "SCONFITTA"}</p>
