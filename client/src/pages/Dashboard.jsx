@@ -64,13 +64,8 @@ export default function Dashboard() {
 
             {data.map((player) => (
                 <div
+                    className="member-card"
                     key={player.discordId}
-                    style={{
-                        border: "1px solid #ddd",
-                        margin: "10px 0",
-                        padding: "10px",
-                        borderRadius: "8px",
-                    }}
                 >
                     <h2>
                         {player.account?.gameName ?? "Unknown"}#

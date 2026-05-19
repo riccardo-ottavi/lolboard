@@ -3,6 +3,7 @@ import Dashboard from "./pages/Dashboard";
 import HomePage from "./pages/HomePage";
 import ProfilePage from "./pages/ProfilePage";
 import MatchDetails from "./pages/MatchDetails";
+import './App.css'
 
 function App() {
   return (

@@ -1,5 +1,24 @@
 const members = require('../config/members');
 
+const cache = new Map();
+
+const getCached = async (key, fetcher, ttl = 60000) => {
+  const existing = cache.get(key);
+
+  if (existing && Date.now() - existing.timestamp < ttl) {
+    return existing.data;
+  }
+
+  const fresh = await fetcher();
+
+  cache.set(key, {
+    data: fresh,
+    timestamp: Date.now(),
+  });
+
+  return fresh;
+};
+
 const getAccount = async ({ gameName, tagLine }) => {
   const res = await fetch(
     `https://europe.api.riotgames.com/riot/account/v1/accounts/by-riot-id/${encodeURIComponent(gameName)}/${encodeURIComponent(tagLine)}`,
@@ -31,47 +50,37 @@ const getRank = async (puuid) => {
 
 
 const getRecentMatches = async (puuid, count = 10) => {
-  const res = await fetch(
-    `https://europe.api.riotgames.com/lol/match/v5/matches/by-puuid/${puuid}/ids?count=${count}`,
-    { headers: { 'X-Riot-Token': process.env.RIOT_API_KEY } }
-  );
-  if (!res.ok) throw new Error(`Partite non trovate`);
-  const matchIds = await res.json();
 
-  const matches = await Promise.all(
-    matchIds.map(id =>
-      fetch(`https://europe.api.riotgames.com/lol/match/v5/matches/${id}`,
-        { headers: { 'X-Riot-Token': process.env.RIOT_API_KEY } }
-      ).then(r => r.json())
-    )
-  );
-  return matches;
 };
 
 const index = async (req, res) => {
   try {
-    const results = [];
+    const results = await getCached(
+      "summoners_index",
+      async () => {
+        const data = [];
 
-    for (const [discordId, user] of Object.entries(members)) {
-      try {
-        console.log(`Processing: ${user.gameName}#${user.tagLine}`);
+        for (const [discordId, user] of Object.entries(members)) {
+          try {
+            const account = await getAccount(user);
+            const summoner = await getSummoner(account.puuid);
+            const rank = await getRank(account.puuid);
 
-        const account = await getAccount(user);
-        const summoner = await getSummoner(account.puuid);
-        const rank = await getRank(account.puuid);
+            data.push({
+              discordId,
+              account,
+              summoner,
+              rank: rank ?? { tier: "UNRANKED" },
+            });
+          } catch (err) {
+            console.error(err.message);
+          }
+        }
 
-        results.push({
-          discordId,
-          account,
-          summoner,
-          rank: rank ?? { tier: "UNRANKED" },
-        });
-
-      } catch (err) {
-        console.error(`❌ FALLITO: ${user.gameName}#${user.tagLine}`);
-        console.error(err.message);
-      }
-    }
+        return data;
+      },
+      60 * 1000 
+    );
 
     res.json(results);
   } catch (err) {
@@ -90,14 +99,37 @@ const show = async (req, res) => {
       return res.status(404).json({ message: "User non trovato" });
     }
 
-    const account = await getAccount(user);
-    const summoner = await getSummoner(account.puuid);
-    const rank = await getRank(account.puuid);
-    const matchIds = await fetch(
-      `https://europe.api.riotgames.com/lol/match/v5/matches/by-puuid/${account.puuid}/ids?count=5`,
-      { headers: { 'X-Riot-Token': process.env.RIOT_API_KEY } }
-    ).then(r => r.json());
+    const account = await getCached(
+      `account-${user.gameName}-${user.tagLine}`,
+      () => getAccount(user),
+      1000 * 60 * 60 
+    );
 
+    const summoner = await getCached(
+      `summoner-${account.puuid}`,
+      () => getSummoner(account.puuid),
+      1000 * 60 * 30 
+    );
+
+    const rank = await getCached(
+      `rank-${account.puuid}`,
+      () => getRank(account.puuid),
+      1000 * 60 * 10 
+    );
+    const matchIds = await getCached(
+      `matches-${account.puuid}`,
+      async () => {
+        const res = await fetch(
+          `https://europe.api.riotgames.com/lol/match/v5/matches/by-puuid/${account.puuid}/ids?count=5`,
+          { headers: { 'X-Riot-Token': process.env.RIOT_API_KEY } }
+        );
+
+        if (!res.ok) throw new Error("Errore matchIds");
+
+        return res.json();
+      },
+      1000 * 60 * 5 
+    );
     return res.json({
       discordId,
       account,

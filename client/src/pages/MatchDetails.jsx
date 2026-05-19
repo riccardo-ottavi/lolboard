@@ -48,15 +48,41 @@ export default function MatchDetails() {
                         background: p.win ? "#e6ffe6" : "#ffe6e6",
                     }}
                 >
-                    <b>{p.champion}</b>
+                    {/* CHAMPION + LEVEL */}
+                    <b>
+                        {p.champion} (Lv {p.champLevel ?? "?"})
+                    </b>
 
+                    {/* KDA */}
                     <p>
                         KDA: {p.kills}/{p.deaths}/{p.assists}
                     </p>
 
+                    {/* GOLD */}
+                    <p>Gold: {p.goldEarned ?? "?"}</p>
+
+                    {/* TEAM */}
                     <p>Team: {p.team === 100 ? "Blue" : "Red"}</p>
 
-                    <p>{p.win ? "VICTORIA" : "SCONFITTA"}</p>
+                    {/* ITEMS (NO FETCH, SOLO DISPLAY) */}
+                    <div style={{ display: "flex", gap: 5, marginTop: 5 }}>
+                        {(p.items || []).map((itemId, idx) =>
+                            itemId ? (
+                                <img
+                                    key={idx}
+                                    width={32}
+                                    height={32}
+                                    alt="item"
+                                    src={`https://ddragon.leagueoflegends.com/cdn/14.1.1/img/item/${itemId}.png`}
+                                />
+                            ) : null
+                        )}
+                    </div>
+
+                    {/* RESULT */}
+                    <p style={{ fontWeight: "bold" }}>
+                        {p.win ? "VICTORIA" : "SCONFITTA"}
+                    </p>
                 </div>
             ))}
         </div>
