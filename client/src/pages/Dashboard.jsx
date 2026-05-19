@@ -19,6 +19,7 @@ export default function Dashboard() {
                 return json;
             })
             .then((json) => {
+                console.log("RAW DASHBOARD DATA:", json);
                 if (!Array.isArray(json)) {
                     throw new Error("Risposta non valida dal server");
                 }
@@ -51,6 +52,7 @@ export default function Dashboard() {
         return <h2 style={{ padding: 20 }}>Nessun giocatore trovato</h2>;
     }
 
+
     return (
         <div style={{ padding: 20 }}>
 
@@ -67,6 +69,17 @@ export default function Dashboard() {
                     className="member-card"
                     key={player.discordId}
                 >
+                    <img
+                        width={50}
+                        height={50}
+                        style={{ borderRadius: "50%" }}
+                        alt="lol profile icon"
+                        src={
+                            player.summoner?.profileIconId
+                                ? `https://ddragon.leagueoflegends.com/cdn/15.8.1/img/profileicon/${player.summoner.profileIconId}.png`
+                                : `https://ddragon.leagueoflegends.com/cdn/15.8.1/img/profileicon/1.png`
+                        }
+                    />
                     <h2>
                         {player.account?.gameName ?? "Unknown"}#
                         {player.account?.tagLine ?? ""}

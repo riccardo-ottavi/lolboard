@@ -8,7 +8,7 @@ import './App.css'
 function App() {
   return (
     <BrowserRouter>
-      <h1>App.jsx</h1>
+      <h1>LolBoard</h1>
 
       <Routes>
         <Route path="/" element={<HomePage />} />

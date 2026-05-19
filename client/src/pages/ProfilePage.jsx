@@ -90,18 +90,20 @@ export default function Profile() {
 
                 return (
                     <div
+                        className="match-card"
                         key={match.matchId}
                         style={{
-                            border: "1px solid #ddd",
-                            margin: "10px 0",
-                            padding: "10px",
-                            borderRadius: "8px",
                             background: me?.win ? "#e6ffe6" : "#ffe6e6",
-                            cursor: "pointer"
                         }}
                         onClick={() => navigate(`/match/${match.matchId}`)}
                     >
-                        <b>{me?.champion}</b>
+                        <img
+                            width={40}
+                            height={40}
+                            alt={me?.champion}
+                            src={`https://ddragon.leagueoflegends.com/cdn/15.8.1/img/champion/${me?.champion}.png`}
+                        />
+                        <p>{me?.champion}</p>
                         <p>{me?.win ? "VICTORIA" : "SCONFITTA"}</p>
                         <p>
                             KDA: {me?.kills}/{me?.deaths}/{me?.assists}

@@ -1,12 +1,27 @@
-*{
+* {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
 }
 
-.member-card{
+.member-card {
   border: 1px solid black;
   margin: 10px 0;
   padding: 10px;
   border-radius: 8px;
+}
+
+.match-card {
+  border: 1px solid #ddd;
+  margin: 10px 0;
+  padding: 10px;
+  border-radius: 8px;
+  cursor: "pointer"
+}
+
+.match-partecipant-card {
+  border: 1px solid #ddd;
+  margin: 10px 0;
+  padding: 10px;
+  border-radius: 8px
 }

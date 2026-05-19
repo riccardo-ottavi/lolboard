@@ -71,6 +71,7 @@ const index = async (req, res) => {
               account,
               summoner,
               rank: rank ?? { tier: "UNRANKED" },
+              avatar: members[discordId]?.avatar
             });
           } catch (err) {
             console.error(err.message);
@@ -135,7 +136,8 @@ const show = async (req, res) => {
       account,
       summoner,
       rank: rank ?? { tier: "UNRANKED" },
-      matchIds
+      matchIds,
+      avatar: members[discordId]?.avatar
     });
 
   } catch (err) {

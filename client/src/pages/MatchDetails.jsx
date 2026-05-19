@@ -39,32 +39,35 @@ export default function MatchDetails() {
 
             {match.participants.map((p, i) => (
                 <div
+                    className="match-partecipant-card"
                     key={i}
                     style={{
-                        border: "1px solid #ddd",
-                        margin: "10px 0",
-                        padding: "10px",
-                        borderRadius: "8px",
                         background: p.win ? "#e6ffe6" : "#ffe6e6",
                     }}
                 >
-                    {/* CHAMPION + LEVEL */}
                     <b>
-                        {p.champion} (Lv {p.champLevel ?? "?"})
+                        <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
+                            <img
+                                width={40}
+                                height={40}
+                                alt={p.championName}
+                                src={`https://ddragon.leagueoflegends.com/cdn/15.8.1/img/champion/${p.champion}.png`}
+                            />
+
+                            <b>
+                                {p.champion} (Lv {p.level ?? "?"})
+                            </b>
+                        </div>
                     </b>
 
-                    {/* KDA */}
                     <p>
                         KDA: {p.kills}/{p.deaths}/{p.assists}
                     </p>
 
-                    {/* GOLD */}
                     <p>Gold: {p.goldEarned ?? "?"}</p>
 
-                    {/* TEAM */}
                     <p>Team: {p.team === 100 ? "Blue" : "Red"}</p>
 
-                    {/* ITEMS (NO FETCH, SOLO DISPLAY) */}
                     <div style={{ display: "flex", gap: 5, marginTop: 5 }}>
                         {(p.items || []).map((itemId, idx) =>
                             itemId ? (
@@ -79,7 +82,6 @@ export default function MatchDetails() {
                         )}
                     </div>
 
-                    {/* RESULT */}
                     <p style={{ fontWeight: "bold" }}>
                         {p.win ? "VICTORIA" : "SCONFITTA"}
                     </p>
