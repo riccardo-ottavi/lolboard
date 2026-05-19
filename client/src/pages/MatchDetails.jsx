@@ -31,6 +31,8 @@ export default function MatchDetails() {
         <div style={{ padding: 20 }}>
             <h1>Match Details</h1>
 
+            <button><a href="/dashboard">Torna alla dashboard</a></button>
+
             <h2>
                 {match.gameMode} — {Math.floor(match.gameDuration / 60)} min
             </h2>

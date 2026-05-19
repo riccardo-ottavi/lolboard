@@ -1,9 +1,11 @@
 import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 export default function Dashboard() {
     const [data, setData] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
+    const navigate = useNavigate();
 
     useEffect(() => {
         fetch("http://localhost:3000/summoners", {
@@ -58,7 +60,7 @@ export default function Dashboard() {
 
             <a href="/profile">
                 <button style={{ marginBottom: 20 }}>
-                    Vai al profilo
+                    Vai al tuo profilo
                 </button>
             </a>
 
@@ -68,6 +70,7 @@ export default function Dashboard() {
                 <div
                     className="member-card"
                     key={player.discordId}
+                     onClick={() => navigate(`/player/${player.discordId}`)}
                 >
                     <img
                         width={50}
