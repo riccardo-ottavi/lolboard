@@ -30,6 +30,7 @@ const show = async (req, res) => {
       participants: info.participants.map((p) => ({
         puuid: p.puuid,
         summonerName: p.riotIdGameName || p.summonerName,
+        tagLine: p.riotIdTagline || "",
 
         champion: p.championName,
         level: p.champLevel,

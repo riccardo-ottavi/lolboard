@@ -50,12 +50,15 @@ export default function MatchDetails() {
                             <img
                                 width={40}
                                 height={40}
-                                alt={p.championName}
+                                alt={p.champion}
                                 src={`https://ddragon.leagueoflegends.com/cdn/15.8.1/img/champion/${p.champion}.png`}
                             />
 
                             <b>
                                 {p.champion} (Lv {p.level ?? "?"})
+                            </b>
+                            <b>
+                                {p.summonerName}#{p.tagLine}
                             </b>
                         </div>
                     </b>
