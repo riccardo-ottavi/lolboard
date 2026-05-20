@@ -15,6 +15,85 @@ body {
   margin: 10px 0;
   padding: 10px;
   border-radius: 8px;
+  width: 80%;
+  margin: 0 auto;
+  height: 150px;
+}
+
+header {
+  display: flex;
+  justify-content: center;
+}
+
+.homepage{
+  display: flex;
+  justify-content: center;
+  margin-top: 90px;
+}
+
+button{
+  width: 160px;
+  height: 50px;
+  font-size: 15px;
+  border-radius: 8px;
+}
+
+a{
+  max-width: 300px;
+}
+
+.dashboard-container{
+  display: flex;
+  flex-direction: column;
+  padding: 20px;
+  gap: 15px;
+}
+
+.match-details-header{
+  display: flex;
+  flex-direction: column;
+  align-items :center;
+  gap: 15px;
+  margin-bottom: 15px;
+}
+
+.summoner-page-header{
+  display: flex;
+  flex-direction: column;
+  align-items :center;
+  gap: 15px;
+  margin-bottom: 15px;
+}
+
+.profile-match-history{
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.dashboard-header{
+  display: flex;
+  flex-direction: column;
+  align-items :center;
+  gap: 15px;
+}
+
+header img{
+  height: 300px;
+}
+
+.match-partecipants-container{
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.profile-header{
+  margin-top: 15px;
+  margin-bottom: 15px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 
 .match-card {
@@ -24,6 +103,8 @@ body {
   border-radius: 8px;
   cursor: "pointer";
   color: black;
+  width: 80%;
+  margin: 0 auto;
 }
 
 .match-partecipant-card {
@@ -32,4 +113,6 @@ body {
   padding: 10px;
   border-radius: 8px;
   color: black;
+  width: 80%;
+  margin: 0 auto;
 }

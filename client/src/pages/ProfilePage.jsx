@@ -44,77 +44,78 @@ export default function Profile() {
         : null;
 
     return (
-        <div style={{ padding: 20 }}>
-            <a href="/dashboard">
-                <button style={{ marginBottom: 20 }}>
-                    Vai alla dashboard
-                </button>
-            </a>
+        <div>
+            <div className="profile-header">
+                <a href="/dashboard">
+                    <button style={{ marginBottom: 20 }}>
+                        Vai alla dashboard
+                    </button>
+                </a>
 
-            <h1>Profilo</h1>
+                <h1>Profilo</h1>
 
-            <div style={{ display: "flex", gap: 20, alignItems: "center" }}>
-                {avatarUrl && (
-                    <img
-                        src={avatarUrl}
-                        alt="avatar"
-                        width={80}
-                        height={80}
-                        style={{ borderRadius: "50%" }}
-                    />
-                )}
+                <div style={{ display: "flex", gap: 20, alignItems: "center" }}>
+                    {avatarUrl && (
+                        <img
+                            src={avatarUrl}
+                            alt="avatar"
+                            width={80}
+                            height={80}
+                            style={{ borderRadius: "50%" }}
+                        />
+                    )}
 
-                <div>
-                    <h2>{user.username}</h2>
+                    <div>
+                        <h2>{user.username}</h2>
 
-                    <p>
-                        Riot ID:{" "}
-                        <b>
-                            {user.riot_summoner_name?.gameName}#
-                            {user.riot_summoner_name?.tagLine}
-                        </b>
-                    </p>
+                        <p>
+                            Riot ID:{" "}
+                            <b>
+                                {user.riot_summoner_name?.gameName}#
+                                {user.riot_summoner_name?.tagLine}
+                            </b>
+                        </p>
+                    </div>
                 </div>
             </div>
 
-            <h2 style={{ marginTop: 30 }}>Ultime partite</h2>
-
             {matches.length === 0 && <p>Caricamento partite...</p>}
+            <div className="profile-match-history">
+                {matches.map((match) => {
+                    const info = match.participants ? match : match.info;
 
-            {matches.map((match) => {
-                const info = match.participants ? match : match.info;
+                    const me = info.participants.find(
+                        (p) => p.puuid === profile.account.puuid
+                    );
 
-                const me = info.participants.find(
-                    (p) => p.puuid === profile.account.puuid
-                );
-
-                return (
-                    <div
-                        className="match-card"
-                        key={match.matchId}
-                        style={{
-                            background: me?.win ? "#e6ffe6" : "#ffe6e6",
-                        }}
-                        onClick={() => navigate(`/match/${match.matchId}`)}
-                    >
-                        <img
-                            width={40}
-                            height={40}
-                            alt={me?.champion}
-                            src={`https://ddragon.leagueoflegends.com/cdn/15.8.1/img/champion/${me?.champion}.png`}
-                        />
-                        <p>{me?.champion}</p>
-                        <p>{me?.win ? "VICTORIA" : "SCONFITTA"}</p>
-                        <p>
-                            KDA: {me?.kills}/{me?.deaths}/{me?.assists}
-                        </p>
-                        <p>
-                            Durata:{" "}
-                            {Math.floor(match.gameDuration / 60)} min
-                        </p>
-                    </div>
-                );
-            })}
+                    return (
+                        <div
+                            className="match-card"
+                            key={match.matchId}
+                            style={{
+                                background: me?.win ? "#e6ffe6" : "#ffe6e6",
+                            }}
+                            onClick={() => navigate(`/match/${match.matchId}`)}
+                        >
+                            <img
+                                width={40}
+                                height={40}
+                                alt={me?.champion}
+                                src={`https://ddragon.leagueoflegends.com/cdn/15.8.1/img/champion/${me?.champion}.png`}
+                            />
+                            <p>{me?.champion}</p>
+                            <p>{me?.win ? "VICTORIA" : "SCONFITTA"}</p>
+                            <p>
+                                KDA: {me?.kills}/{me?.deaths}/{me?.assists}
+                            </p>
+                            <p>
+                                Durata:{" "}
+                                {Math.floor(match.gameDuration / 60)} min
+                            </p>
+                        </div>
+                    );
+                })}
+            </div>
         </div>
     );
 }

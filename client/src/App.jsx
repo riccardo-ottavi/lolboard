@@ -5,11 +5,12 @@ import ProfilePage from "./pages/ProfilePage";
 import MatchDetails from "./pages/MatchDetails";
 import SummonerPage from "./pages/SummonerPage";
 import './App.css'
+import Header from "./components/Header";
 
 function App() {
   return (
     <BrowserRouter>
-      <h1>LolBoard</h1>
+      <Header />
 
       <Routes>
         <Route path="/" element={<HomePage />} />

@@ -36,17 +36,19 @@ export default function SummonerPage() {
 
     return (
         <div style={{ padding: 20 }}>
-            <button onClick={() => navigate("/dashboard")}>
-                ← Torna indietro
-            </button>
+            <div className="summoner-page-header">
+                <button onClick={() => navigate("/dashboard")}>
+                    ← Torna indietro
+                </button>
 
-            <h1>
-                {profile.account.gameName}#{profile.account.tagLine}
-            </h1>
+                <h1>
+                    {profile.account.gameName}#{profile.account.tagLine}
+                </h1>
 
-            <h2 style={{ marginTop: 30 }}>Ultime partite</h2>
+                <h2 style={{ marginTop: 30 }}>Ultime partite</h2>
 
-            {matches.length === 0 && <p>Caricamento partite...</p>}
+                {matches.length === 0 && <p>Caricamento partite...</p>}
+            </div>
 
             {matches.map((match) => {
                 const info = match.participants ? match : match.info;
@@ -70,7 +72,6 @@ export default function SummonerPage() {
                         }}
                         onClick={() => navigate(`/match/${match.matchId}`)}
                     >
-                        {/* CHAMPION ICON */}
                         <img
                             width={40}
                             height={40}

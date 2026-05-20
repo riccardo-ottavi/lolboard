@@ -56,21 +56,23 @@ export default function Dashboard() {
 
 
     return (
-        <div style={{ padding: 20 }}>
-
-            <a href="/profile">
-                <button style={{ marginBottom: 20 }}>
-                    Vai al tuo profilo
-                </button>
-            </a>
-
-            <h1>Dashboard Summoners</h1>
+        <div
+            className="dashboard-container"
+        >
+            <div className="dashboard-header">
+                <h1>Dashboard</h1>
+                <a href="/profile">
+                    <button style={{ marginBottom: 20 }}>
+                        Vai al tuo profilo
+                    </button>
+                </a>
+            </div>
 
             {data.map((player) => (
                 <div
                     className="member-card"
                     key={player.discordId}
-                     onClick={() => navigate(`/player/${player.discordId}`)}
+                    onClick={() => navigate(`/player/${player.discordId}`)}
                 >
                     <img
                         width={50}
