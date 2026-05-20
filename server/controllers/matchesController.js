@@ -23,17 +23,50 @@ const show = async (req, res) => {
     const info = match.info;
 
     const cleaned = {
-      matchId,
-      gameMode: info.gameMode,
+      matchId: match.metadata.matchId,
+
       gameDuration: info.gameDuration,
+      gameMode: info.gameMode,
+
+      game: {
+        mode: info.gameMode,
+        type: info.gameType,
+        queueId: info.queueId,
+        duration: info.gameDuration,
+        version: info.gameVersion,
+        mapId: info.mapId,
+        creation: info.gameCreation,
+        start: info.gameStartTimestamp,
+        end: info.gameEndTimestamp,
+      },
+
+      info: info,
+
+      teams: info.teams.map((team) => ({
+        teamId: team.teamId,
+        win: team.win,
+        objectives: {
+          baron: team.objectives.baron.kills,
+          dragon: team.objectives.dragon.kills,
+          tower: team.objectives.tower.kills,
+          inhibitor: team.objectives.inhibitor.kills,
+          riftHerald: team.objectives.riftHerald.kills,
+        },
+        bans: team.bans.map((b) => b.championId),
+      })),
 
       participants: info.participants.map((p) => ({
         puuid: p.puuid,
+
         summonerName: p.riotIdGameName || p.summonerName,
         tagLine: p.riotIdTagline || "",
 
         champion: p.championName,
         level: p.champLevel,
+
+        role: p.teamPosition,
+        team: p.teamId,
+        win: p.win,
 
         kills: p.kills,
         deaths: p.deaths,
@@ -41,9 +74,15 @@ const show = async (req, res) => {
 
         goldEarned: p.goldEarned,
 
-        win: p.win,
-        team: p.teamId,
-        role: p.teamPosition,
+        // extra già usati in UI future-safe
+        kda:
+          p.deaths === 0
+            ? "Perfect"
+            : ((p.kills + p.assists) / p.deaths).toFixed(2),
+
+        cs: (p.totalMinionsKilled || 0) + (p.neutralMinionsKilled || 0),
+        vision: p.visionScore,
+        damage: p.totalDamageDealtToChampions,
 
         items: [
           p.item0,
@@ -54,6 +93,8 @@ const show = async (req, res) => {
           p.item5,
           p.item6,
         ],
+
+        spells: [p.summoner1Id, p.summoner2Id],
       })),
     };
 
