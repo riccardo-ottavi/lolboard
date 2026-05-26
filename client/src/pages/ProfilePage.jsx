@@ -8,7 +8,7 @@ export default function Profile() {
     const [matches, setMatches] = useState([]);
 
     useEffect(() => {
-        fetch("http://localhost:3000/me", {
+        fetch(`${import.meta.env.VITE_API_URL}/me`, {
             credentials: "include",
         })
             .then((res) => res.json())
@@ -18,7 +18,7 @@ export default function Profile() {
     useEffect(() => {
         if (!user?.discord_id) return;
 
-        fetch(`http://localhost:3000/summoners/${user.discord_id}`, {
+        fetch(`${import.meta.env.VITE_API_URL}/summoners/${user.discord_id}`, {
             credentials: "include",
         })
             .then((res) => res.json())
@@ -30,7 +30,7 @@ export default function Profile() {
 
         Promise.all(
             profile.matchIds.map((id) =>
-                fetch(`http://localhost:3000/matches/match/${id}`, {
+                fetch(`${import.meta.env.VITE_API_URL}/matches/match/${id}`, {
                     credentials: "include",
                 }).then((r) => r.json())
             )

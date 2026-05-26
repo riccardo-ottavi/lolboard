@@ -9,7 +9,7 @@ export default function SummonerPage() {
     const [matches, setMatches] = useState([]);
 
     useEffect(() => {
-        fetch(`http://localhost:3000/summoners/${discordId}`, {
+        fetch(`${import.meta.env.VITE_API_URL}/summoners/${discordId}`, {
             credentials: "include",
         })
             .then((r) => r.json())
@@ -21,7 +21,7 @@ export default function SummonerPage() {
 
         Promise.all(
             profile.matchIds.map((id) =>
-                fetch(`http://localhost:3000/matches/match/${id}`, {
+                fetch(`${import.meta.env.VITE_API_URL}/matches/match/${id}`, {
                     credentials: "include",
                 }).then((r) => r.json())
             )

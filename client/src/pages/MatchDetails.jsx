@@ -29,7 +29,7 @@ export default function MatchDetails() {
     };
 
     useEffect(() => {
-        fetch(`http://localhost:3000/matches/match/${matchId}`, {
+        fetch(`${import.meta.env.VITE_API_URL}/matches/match/${matchId}`, {
             credentials: "include",
         })
             .then(async (res) => {

@@ -8,7 +8,7 @@ export default function Dashboard() {
     const navigate = useNavigate();
 
     useEffect(() => {
-        fetch("http://localhost:3000/summoners", {
+        fetch(`${import.meta.env.VITE_API_URL}/summoners`, {
             credentials: "include",
         })
             .then(async (res) => {
