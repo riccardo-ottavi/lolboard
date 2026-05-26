@@ -14,7 +14,7 @@ const app = express();
 app.use(cors({
   origin: [
     "http://localhost:5173",
-    "https://lolboard-a7svnp2j1-riccardo-ottavis-projects.vercel.app"
+    "https://lolboard.vercel.app"
   ],
 
   credentials: true
