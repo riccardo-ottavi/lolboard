@@ -25,8 +25,8 @@ app.use(session({
   resave: false,
   saveUninitialized: false,
   cookie: {
-    secure: false,
-    sameSite: "lax"  
+    secure: true,         
+    sameSite: "none"      
   },
 }));
 
