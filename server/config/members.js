@@ -9,6 +9,7 @@ const members = {
   "275332669531881473": { gameName: "Dante", tagLine: "LIPPO" },
   "358539469898383362": { gameName: "CarlitoBan", tagLine: "5442" },
   "165099509762883584": { gameName: "FOL", tagLine: "00000" },
+  "456012936251703316": { gameName: "ChickenCarry", tagLine: "CKC" },
 };
 
 module.exports = members;
