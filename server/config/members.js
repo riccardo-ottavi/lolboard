@@ -10,7 +10,8 @@ const members = {
   "358539469898383362": { gameName: "CarlitoBan", tagLine: "5442" },
   "165099509762883584": { gameName: "FOL", tagLine: "00000" },
   "456012936251703316": { gameName: "ChickenCarry", tagLine: "CKC" },
-  "689252607042125826": { gameName: "Zantres17", tagLine: "Zantr" }
+  "689252607042125826": { gameName: "Zantres17", tagLine: "Zantr" },
+  "1287739609534566444": { gameName: "Chemil il Grande", tagLine: "EUW" }
 };
 
 module.exports = members;

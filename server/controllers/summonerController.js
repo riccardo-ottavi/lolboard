@@ -93,7 +93,7 @@ const index = async (req, res) => {
             const summoner = await getSummoner(account.puuid);
             await sleep(250);
 
-            const rank = await getRank(account.puuid); // FIX QUI
+            const rank = await getRank(account.puuid);  
             await sleep(300);
 
             data.push({
