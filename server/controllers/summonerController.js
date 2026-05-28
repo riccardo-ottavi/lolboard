@@ -1,5 +1,5 @@
 const members = require('../config/members');
-
+const sleep = (ms) => new Promise(resolve => setTimeout(resolve, ms));
 const cache = new Map();
 
 const getCached = async (key, fetcher, ttl = 60000) => {
@@ -87,29 +87,31 @@ const index = async (req, res) => {
 
         for (const [discordId, user] of Object.entries(members)) {
           try {
-
             const account = await getAccount(user);
+            await sleep(250);
 
-            const [summoner, rank] = await Promise.all([
-              getSummoner(account.puuid),
-              getRank(account.puuid),
-            ]);
+            const summoner = await getSummoner(account.puuid);
+            await sleep(250);
+
+            const rank = await getRank(account.puuid); // FIX QUI
+            await sleep(300);
 
             data.push({
               discordId,
               account,
               summoner,
-              rank: rank ?? { tier: 'UNRANKED' },
+              rank: rank ?? { tier: "UNRANKED" },
               avatar: user?.avatar,
             });
+
           } catch (err) {
-            console.error(err.message);
+            console.error("❌", discordId, err.message);
           }
         }
 
         return data;
       },
-      60 * 1000
+      60 * 1000 * 5
     );
 
     res.json(results);
