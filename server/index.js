@@ -3,6 +3,7 @@ require('dotenv').config();
 const express = require('express');
 const cors = require("cors");
 const passport = require('passport');
+const session = require('express-session');
 
 const summonerRouter = require('./routers/summonerRouter');
 const matchesRouter = require("./routers/matchesRouter");
@@ -21,7 +22,18 @@ app.use(cors({
   credentials: true
 }));
 
+app.use(session({
+  secret: process.env.SESSION_SECRET,
+  resave: false,
+  saveUninitialized: false,
+  cookie: {
+    secure: false,
+    sameSite: "lax"
+  }
+}));
+
 app.use(passport.initialize());
+app.use(passport.session());
 
 initDiscordStrategy();
 
