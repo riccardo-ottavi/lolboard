@@ -1,7 +1,6 @@
 require('dotenv').config();
 const express = require('express');
 const cors = require("cors");
-const session = require('express-session');
 const summonerRouter = require('./routers/summonerRouter');
 const matchesRouter = require("./routers/matchesRouter");
 const passport = require('passport');
@@ -31,7 +30,7 @@ app.use(session({
 }));
 
 app.use(passport.initialize());
-app.use(passport.session());
+ 
 
 initDiscordStrategy();
 

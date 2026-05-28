@@ -9,7 +9,9 @@ export default function Dashboard() {
 
     useEffect(() => {
         fetch(`${import.meta.env.VITE_API_URL}/summoners`, {
-            credentials: "include",
+            headers: {
+                Authorization: `Bearer ${localStorage.getItem("token")}`
+            }
         })
             .then(async (res) => {
                 const json = await res.json();

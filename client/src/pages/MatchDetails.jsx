@@ -30,7 +30,9 @@ export default function MatchDetails() {
 
     useEffect(() => {
         fetch(`${import.meta.env.VITE_API_URL}/matches/match/${matchId}`, {
-            credentials: "include",
+            headers: {
+                Authorization: `Bearer ${localStorage.getItem("token")}`
+            }
         })
             .then(async (res) => {
                 const json = await res.json();

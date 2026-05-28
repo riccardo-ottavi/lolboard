@@ -9,7 +9,9 @@ export default function Profile() {
 
     useEffect(() => {
         fetch(`${import.meta.env.VITE_API_URL}/me`, {
-            credentials: "include",
+            headers: {
+                Authorization: `Bearer ${localStorage.getItem("token")}`
+            }
         })
             .then((res) => res.json())
             .then(setUser);
@@ -19,7 +21,9 @@ export default function Profile() {
         if (!user?.discord_id) return;
 
         fetch(`${import.meta.env.VITE_API_URL}/summoners/${user.discord_id}`, {
-            credentials: "include",
+            headers: {
+                Authorization: `Bearer ${localStorage.getItem("token")}`
+            }
         })
             .then((res) => res.json())
             .then(setProfile);
@@ -31,7 +35,9 @@ export default function Profile() {
         Promise.all(
             profile.matchIds.map((id) =>
                 fetch(`${import.meta.env.VITE_API_URL}/matches/match/${id}`, {
-                    credentials: "include",
+                    headers: {
+                        Authorization: `Bearer ${localStorage.getItem("token")}`
+                    }
                 }).then((r) => r.json())
             )
         ).then(setMatches);

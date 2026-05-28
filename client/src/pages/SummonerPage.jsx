@@ -10,7 +10,9 @@ export default function SummonerPage() {
 
     useEffect(() => {
         fetch(`${import.meta.env.VITE_API_URL}/summoners/${discordId}`, {
-            credentials: "include",
+            headers: {
+                Authorization: `Bearer ${localStorage.getItem("token")}`
+            }
         })
             .then((r) => r.json())
             .then(setProfile);
@@ -22,7 +24,9 @@ export default function SummonerPage() {
         Promise.all(
             profile.matchIds.map((id) =>
                 fetch(`${import.meta.env.VITE_API_URL}/matches/match/${id}`, {
-                    credentials: "include",
+                    headers: {
+                        Authorization: `Bearer ${localStorage.getItem("token")}`
+                    }
                 }).then((r) => r.json())
             )
         ).then(setMatches);

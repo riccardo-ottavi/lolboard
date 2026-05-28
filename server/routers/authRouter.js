@@ -1,5 +1,6 @@
 const { Router } = require('express');
 const passport = require('passport');
+const jwt = require('jsonwebtoken');
 
 const router = Router();
 
@@ -10,7 +11,19 @@ router.get('/discord/callback',
     failureRedirect: '/auth/denied',
   }),
   (req, res) => {
-    res.redirect(`${process.env.CLIENT_URL}/dashboard`);
+
+    const token = jwt.sign(
+      {
+        discord_id: req.user.discord_id,
+        username: req.user.username,
+      },
+      process.env.JWT_SECRET,
+      { expiresIn: "7d" }
+    );
+
+    res.redirect(
+      `${process.env.CLIENT_URL}/auth?token=${token}`
+    );
   }
 );
 
