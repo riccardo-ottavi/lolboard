@@ -1,10 +1,13 @@
 require('dotenv').config();
+
 const express = require('express');
 const cors = require("cors");
+const passport = require('passport');
+
 const summonerRouter = require('./routers/summonerRouter');
 const matchesRouter = require("./routers/matchesRouter");
-const passport = require('passport');
 const authRouter = require('./routers/authRouter');
+
 const { initDiscordStrategy } = require('./auth/discordStrategy');
 const { requireAuth } = require('./middlewares/requireAuth');
 
@@ -15,34 +18,21 @@ app.use(cors({
     "http://localhost:5173",
     "https://lolboard.vercel.app"
   ],
-
   credentials: true
 }));
 
-app.use(session({
-  secret: process.env.SESSION_SECRET,
-  resave: false,
-  saveUninitialized: false,
-  cookie: {
-    secure: true,         
-    sameSite: "none"      
-  },
-}));
-
 app.use(passport.initialize());
- 
 
 initDiscordStrategy();
 
 app.use('/auth', authRouter);
-app.use('/summoners',requireAuth, summonerRouter);
+app.use('/summoners', requireAuth, summonerRouter);
 app.use("/matches", requireAuth, matchesRouter);
 
 app.get("/", (req, res) => {
   res.send("<h1>Lolboard Homepage</h1>");
 });
 
-//test
 app.get('/me', requireAuth, (req, res) => {
   res.json(req.user);
 });
