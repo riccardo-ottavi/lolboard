@@ -5,7 +5,7 @@
 }
 
 body {
-  background: #0a0f1a;
+  background: #06050f;
   color: #f1f5f9;
   font-family: 'Inter', sans-serif;
 }
@@ -28,7 +28,7 @@ header {
 .homepage{
   display: flex;
   justify-content: center;
-  margin-top: 90px;
+  margin-top: 40px;
 }
 
 button{
