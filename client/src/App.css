@@ -25,10 +25,32 @@ header {
   justify-content: center;
 }
 
+footer{
+  position: fixed;
+  left: 0;
+  bottom: 0;
+  background-color: whitesmoke;
+  color: black;
+  width: 100%;
+}
+
+ul{
+  display: flex;
+  list-style: none;
+}
+
+a{
+  color: black;
+  text-decoration: none;
+}
+
 .homepage{
   display: flex;
+  flex-direction: column;
   justify-content: center;
+  align-items: center;
   margin-top: 40px;
+  position: relative;
 }
 
 button{
