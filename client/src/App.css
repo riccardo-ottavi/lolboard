@@ -38,7 +38,9 @@ footer{
   gap: 10px;
   font-size: 14px;
   padding: 10px;
+  align-items: center;
 }
+
 
 ul{
   display: flex;
@@ -147,3 +149,4 @@ header img{
   width: 80%;
   margin: 0 auto;
 }
+
